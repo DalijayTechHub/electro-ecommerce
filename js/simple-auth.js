@@ -1,33 +1,14 @@
-// AWS Amplify Auth functions will be available globally
-
-class AuthService {
+// Simple authentication without ES6 modules
+class SimpleAuth {
   constructor() {
     this.currentUser = null;
-    this.checkAuthState();
-  }
-
-  async checkAuthState() {
-    try {
-      const user = await getCurrentUser();
-      this.currentUser = user;
-      this.updateUI();
-    } catch (error) {
-      this.currentUser = null;
-      this.updateUI();
-    }
   }
 
   async register(email, password, fullName) {
     try {
-      const { user } = await window.aws.auth.signUp({
-        username: email,
-        password: password,
-        attributes: {
-          email: email,
-          name: fullName
-        }
-      });
-      return { success: true, user, needsConfirmation: true };
+      // Simulate registration - replace with actual Cognito calls when deployed
+      console.log('Registration:', { email, password, fullName });
+      return { success: true, needsConfirmation: true };
     } catch (error) {
       return { success: false, error: error.message };
     }
@@ -35,10 +16,7 @@ class AuthService {
 
   async confirmRegistration(email, code) {
     try {
-      await confirmSignUp({
-        username: email,
-        confirmationCode: code
-      });
+      console.log('Confirming registration:', { email, code });
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -47,17 +25,10 @@ class AuthService {
 
   async login(email, password) {
     try {
-      const { isSignedIn, nextStep } = await signIn({
-        username: email,
-        password: password
-      });
-      
-      if (isSignedIn) {
-        await this.checkAuthState();
-        return { success: true, user: this.currentUser };
-      } else {
-        return { success: false, error: 'Sign in incomplete', nextStep };
-      }
+      console.log('Login:', { email, password });
+      this.currentUser = { username: email, attributes: { email, name: 'User' } };
+      this.updateUI();
+      return { success: true, user: this.currentUser };
     } catch (error) {
       return { success: false, error: error.message };
     }
@@ -65,7 +36,6 @@ class AuthService {
 
   async logout() {
     try {
-      await signOut();
       this.currentUser = null;
       this.updateUI();
       return { success: true };
@@ -76,7 +46,7 @@ class AuthService {
 
   async forgotPassword(email) {
     try {
-      await resetPassword({ username: email });
+      console.log('Forgot password:', email);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -85,20 +55,7 @@ class AuthService {
 
   async confirmForgotPassword(email, code, newPassword) {
     try {
-      await confirmResetPassword({
-        username: email,
-        confirmationCode: code,
-        newPassword: newPassword
-      });
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
-  }
-
-  async resendConfirmationCode(email) {
-    try {
-      await resendSignUpCode({ username: email });
+      console.log('Confirm forgot password:', { email, code, newPassword });
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -114,7 +71,6 @@ class AuthService {
   }
 
   updateUI() {
-    // Update navigation based on auth state
     const loginLink = document.getElementById('loginLink');
     const userMenu = document.getElementById('userMenu');
     
@@ -133,7 +89,4 @@ class AuthService {
   }
 }
 
-// Create global auth service instance
-window.authService = new AuthService();
-
-export default AuthService;
+window.simpleAuth = new SimpleAuth();

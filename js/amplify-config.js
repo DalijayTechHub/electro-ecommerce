@@ -1,5 +1,4 @@
-import { Amplify } from 'aws-amplify';
-import { generateClient } from 'aws-amplify/api';
+// AWS Amplify will be loaded via CDN
 
 // Amplify configuration
 const amplifyConfig = {
@@ -24,9 +23,8 @@ const amplifyConfig = {
   }
 };
 
-Amplify.configure(amplifyConfig);
-
-const client = generateClient();
+// Configuration will be applied when Amplify loads
+window.amplifyConfig = amplifyConfig;
 
 // Product operations
 export const productOperations = {

@@ -2270,12 +2270,9 @@
     <script src="js/ecommerce.js"></script>
     
     <!-- Authentication -->
-    <script type="module">
-        import './js/amplify-config.js';
-        import AuthService from './js/auth.js';
-        
-        // Initialize auth service
-        const authService = new AuthService();
+    <script src="js/simple-auth.js"></script>
+    <script>
+        const authService = window.simpleAuth;
         
         // Global logout function
         window.logout = async function() {

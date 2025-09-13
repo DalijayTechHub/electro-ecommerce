@@ -1,4 +1,4 @@
-import { getCurrentUser } from 'aws-amplify/auth';
+// AWS Amplify Auth functions will be available globally
 
 // Auth guard for protected pages
 class AuthGuard {
