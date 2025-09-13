@@ -9,12 +9,19 @@
     "dev": "http-server -p 3000"
   },
   "dependencies": {
-    "aws-amplify": "^6.0.0"
+    "aws-amplify": "^6.0.0",
+    "oidc-client-ts": "^3.3.0",
+    "react-oidc-context": "^3.3.0"
   },
   "devDependencies": {
     "http-server": "^14.1.1"
   },
-  "keywords": ["ecommerce", "bootstrap", "aws", "amplify"],
+  "keywords": [
+    "ecommerce",
+    "bootstrap",
+    "aws",
+    "amplify"
+  ],
   "author": "Your Name",
   "license": "MIT"
 }

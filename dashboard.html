@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>My Dashboard - Electro</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <h4 class="m-0"><i class="fas fa-shopping-bag me-2"></i>Electro</h4>
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="shop.html">Shop</a>
+                <a class="nav-link" href="cart.html">Cart</a>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Account</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="dashboard.html">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="orders.html">My Orders</a></li>
+                        <li><a class="dropdown-item" href="wishlist.html">Wishlist</a></li>
+                        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="login.html">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">My Account</h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="dashboard.html" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                        <a href="orders.html" class="list-group-item list-group-item-action">
+                            <i class="fas fa-shopping-cart me-2"></i>My Orders
+                        </a>
+                        <a href="wishlist.html" class="list-group-item list-group-item-action">
+                            <i class="fas fa-heart me-2"></i>Wishlist
+                        </a>
+                        <a href="profile.html" class="list-group-item list-group-item-action">
+                            <i class="fas fa-user me-2"></i>Profile Settings
+                        </a>
+                        <a href="addresses.html" class="list-group-item list-group-item-action">
+                            <i class="fas fa-map-marker-alt me-2"></i>Addresses
+                        </a>
+                        <a href="login.html" class="list-group-item list-group-item-action text-danger">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Dashboard</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="card bg-primary text-white">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-shopping-cart fa-2x mb-2"></i>
+                                        <h5>Total Orders</h5>
+                                        <h3 id="totalOrders">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-success text-white">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                        <h5>Completed</h5>
+                                        <h3 id="completedOrders">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-warning text-white">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-clock fa-2x mb-2"></i>
+                                        <h5>Pending</h5>
+                                        <h3 id="pendingOrders">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-info text-white">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-heart fa-2x mb-2"></i>
+                                        <h5>Wishlist</h5>
+                                        <h3 id="wishlistItems">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Recent Orders</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="recentOrders">
+                                            <p class="text-muted">No recent orders</p>
+                                        </div>
+                                        <a href="orders.html" class="btn btn-primary btn-sm">View All Orders</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Account Info</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Name:</strong> <span id="userName">John Doe</span></p>
+                                        <p><strong>Email:</strong> <span id="userEmail">john@example.com</span></p>
+                                        <p><strong>Member Since:</strong> <span id="memberSince">Jan 2024</span></p>
+                                        <a href="profile.html" class="btn btn-primary btn-sm">Edit Profile</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/amplify-config.js"></script>
+    <script>
+        // Load dashboard data
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+        });
+
+        async function loadDashboardData() {
+            // Load user orders and stats
+            // This will be implemented with Amplify API calls
+            console.log('Loading dashboard data...');
+        }
+    </script>
+</body>
+</html>

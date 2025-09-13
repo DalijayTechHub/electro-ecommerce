@@ -4,12 +4,13 @@ import { generateClient } from 'aws-amplify/api';
 // Amplify configuration will be auto-generated after deployment
 const amplifyConfig = {
   aws_project_region: 'us-east-1',
-  aws_appsync_graphqlEndpoint: 'YOUR_GRAPHQL_ENDPOINT',
+  aws_appsync_graphqlEndpoint: 'https://ev7foqrqtrb5dfnc5jxzsmncba.appsync-api.us-east-1.amazonaws.com/graphql',
   aws_appsync_region: 'us-east-1',
-  aws_appsync_authenticationType: 'API_KEY',
-  aws_appsync_apiKey: 'YOUR_API_KEY',
+  aws_appsync_authenticationType: '1ri4fsl3rkatiao3s0euga984f',
+  aws_appsync_apiKey: 'da2-yqxugd3k4vdsxlz6mwyqsizqlq',
+  aws_appsync_realtimeEndpoint: 'wss://ev7foqrqtrb5dfnc5jxzsmncba.appsync-realtime-api.us-east-1.amazonaws.com/graphql',
   aws_cognito_region: 'us-east-1',
-  aws_user_pools_id: 'YOUR_USER_POOL_ID',
+  aws_user_pools_id: 'us-east-1_Phg4oT68F',
   aws_user_pools_web_client_id: 'YOUR_CLIENT_ID',
 };
 

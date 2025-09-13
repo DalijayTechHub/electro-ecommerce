@@ -90,12 +90,105 @@ This project has been prepared for AWS Amplify deployment with a full-stack back
 5. Create data sources for DynamoDB tables
 6. Create resolvers for queries/mutations
 
-### 4. Configure Frontend
-1. Copy GraphQL endpoint and API key from AppSync
-2. Update `js/amplify-config.js` with actual values
-3. Redeploy via Amplify Console
+**Create Data Sources:**
+1. Go to **Data Sources** tab → **"Create data source"**
+2. **Products Table:**
+   - Data source name: `ProductsTable`
+   - Data source type: `Amazon DynamoDB table`
+   - Table name: `Products`
+   - Create new role
+3. **Orders Table:**
+   - Data source name: `OrdersTable`
+   - Data source type: `Amazon DynamoDB table`
+   - Table name: `Orders`
+   - Use existing role
 
-### 5. Add Sample Data
+**Create Resolvers:**
+1. Go to **Schema** tab
+2. Find each field → **"Attach resolver"**
+
+**For `listProducts` Query:**
+- Data source: `ProductsTable`
+- Request mapping template:
+```vtl
+{
+    "version": "2017-02-28",
+    "operation": "Scan"
+}
+```
+- Response mapping template:
+```vtl
+$util.toJson($context.result.items)
+```
+
+**For `getProduct` Query:**
+- Data source: `ProductsTable`
+- Request mapping template:
+```vtl
+{
+    "version": "2017-02-28",
+    "operation": "GetItem",
+    "key": {
+        "id": $util.dynamodb.toDynamoDBJson($context.arguments.id)
+    }
+}
+```
+- Response mapping template:
+```vtl
+$util.toJson($context.result)
+```
+
+**For `createOrder` Mutation:**
+- Data source: `OrdersTable`
+- Request mapping template:
+```vtl
+{
+    "version": "2017-02-28",
+    "operation": "PutItem",
+    "key": {
+        "id": $util.dynamodb.toDynamoDBJson($util.autoId())
+    },
+    "attributeValues": $util.dynamodb.toMapValuesJson($context.arguments.input)
+}
+```
+- Response mapping template:
+```vtl
+$util.toJson($context.result)
+```
+
+### 4. Create Cognito User Pool
+1. Go to Cognito Console: https://console.aws.amazon.com/cognito/
+2. Click **"User pools"** → **"Create user pool"**
+3. **Pool name:** `electro-ecommerce-users`
+4. **Sign-in options:** Email
+5. **App client name:** `electro-web-client`
+6. **Copy User Pool ID** (format: `us-east-1_xxxxxxxxx`)
+7. Go to **App integration** tab → **App clients section**
+8. **Copy Client ID**
+
+### 5. Configure Frontend
+1. **Get API Key from AppSync:**
+   - AppSync Console → Your API → Settings
+   - Copy API Key
+
+2. **Update `js/amplify-config.js`:**
+```javascript
+const amplifyConfig = {
+  aws_project_region: 'us-east-1',
+  aws_appsync_graphqlEndpoint: 'https://ev7foqrqtrb5dfnc5jxzsmncba.appsync-api.us-east-1.amazonaws.com/graphql',
+  aws_appsync_region: 'us-east-1',
+  aws_appsync_authenticationType: 'API_KEY',
+  aws_appsync_apiKey: 'YOUR_API_KEY_FROM_APPSYNC',
+  aws_appsync_realtimeEndpoint: 'wss://ev7foqrqtrb5dfnc5jxzsmncba.appsync-realtime-api.us-east-1.amazonaws.com/graphql',
+  aws_cognito_region: 'us-east-1',
+  aws_user_pools_id: 'YOUR_USER_POOL_ID',
+  aws_user_pools_web_client_id: 'YOUR_CLIENT_ID'
+};
+```
+
+3. **Redeploy via Amplify Console**
+
+### 6. Add Sample Data
 Use AppSync Console → Queries to add products
 
 ## GraphQL Schema
@@ -137,16 +230,26 @@ input CreateOrderInput {
 - `js/amplify-config.js`: AWS Amplify configuration and API operations
 - `js/ecommerce.js`: E-commerce functionality (cart, search, checkout)
 
-## Environment Configuration
-Update `js/amplify-config.js` with values from AppSync Console:
+## Complete Configuration Example
 ```javascript
 const amplifyConfig = {
   aws_project_region: 'us-east-1',
-  aws_appsync_graphqlEndpoint: 'https://YOUR-API-ID.appsync-api.us-east-1.amazonaws.com/graphql',
-  aws_appsync_apiKey: 'da2-xxxxxxxxxxxxxxxxxxxxxxxxxx',
-  aws_appsync_authenticationType: 'API_KEY'
+  aws_appsync_graphqlEndpoint: 'https://ev7foqrqtrb5dfnc5jxzsmncba.appsync-api.us-east-1.amazonaws.com/graphql',
+  aws_appsync_region: 'us-east-1',
+  aws_appsync_authenticationType: 'API_KEY',
+  aws_appsync_apiKey: 'da2-yqxugd3k4vdsxlz6mwyqsizqlq',
+  aws_appsync_realtimeEndpoint: 'wss://ev7foqrqtrb5dfnc5jxzsmncba.appsync-realtime-api.us-east-1.amazonaws.com/graphql',
+  aws_cognito_region: 'us-east-1',
+  aws_user_pools_id: 'us-east-1_Phg4oT68F',
+  aws_user_pools_web_client_id: 'YOUR_CLIENT_ID_FROM_COGNITO'
 };
 ```
+
+**Where to get each value:**
+- **GraphQL Endpoint:** AppSync Console → Settings
+- **API Key:** AppSync Console → Settings → API Keys
+- **User Pool ID:** Cognito Console → User pools → Pool details
+- **Client ID:** Cognito Console → User pools → App integration → App clients
 
 ## Sample Data
 Add via AppSync Console → Queries (using S3 URLs):
