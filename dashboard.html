@@ -147,18 +147,78 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/amplify-config.js"></script>
-    <script>
+    <script type="module">
+        import './js/amplify-config.js';
+        import AuthGuard from './js/auth-guard.js';
+        import AuthService from './js/auth.js';
+        import { orderOperations } from './js/amplify-config.js';
+        
+        // Protect this page - require authentication
+        AuthGuard.requireAuth();
+        
+        const authService = new AuthService();
+        
         // Load dashboard data
-        document.addEventListener('DOMContentLoaded', function() {
-            loadDashboardData();
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadDashboardData();
         });
 
         async function loadDashboardData() {
-            // Load user orders and stats
-            // This will be implemented with Amplify API calls
-            console.log('Loading dashboard data...');
+            try {
+                const user = authService.getUser();
+                if (user) {
+                    // Update user info
+                    document.getElementById('userName').textContent = user.attributes?.name || user.username;
+                    document.getElementById('userEmail').textContent = user.attributes?.email || user.username;
+                    
+                    // Load user orders
+                    const ordersResult = await orderOperations.getOrdersByEmail(user.attributes?.email || user.username);
+                    if (ordersResult.data?.listOrders?.items) {
+                        const orders = ordersResult.data.listOrders.items;
+                        updateOrderStats(orders);
+                        displayRecentOrders(orders.slice(0, 3));
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
         }
+        
+        function updateOrderStats(orders) {
+            const totalOrders = orders.length;
+            const completedOrders = orders.filter(order => order.status === 'completed').length;
+            const pendingOrders = orders.filter(order => order.status === 'pending').length;
+            
+            document.getElementById('totalOrders').textContent = totalOrders;
+            document.getElementById('completedOrders').textContent = completedOrders;
+            document.getElementById('pendingOrders').textContent = pendingOrders;
+        }
+        
+        function displayRecentOrders(orders) {
+            const container = document.getElementById('recentOrders');
+            if (orders.length === 0) {
+                container.innerHTML = '<p class="text-muted">No recent orders</p>';
+                return;
+            }
+            
+            container.innerHTML = orders.map(order => `
+                <div class="border-bottom pb-2 mb-2">
+                    <div class="d-flex justify-content-between">
+                        <span>Order #${order.id.substring(0, 8)}</span>
+                        <span class="badge bg-${order.status === 'completed' ? 'success' : 'warning'}">${order.status}</span>
+                    </div>
+                    <small class="text-muted">$${order.totalAmount}</small>
+                </div>
+            `).join('');
+        }
+        
+        // Global logout function
+        window.logout = async function() {
+            const result = await authService.logout();
+            if (result.success) {
+                window.location.href = 'login.html';
+            }
+        };
     </script>
 </body>
 </html>

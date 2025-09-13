@@ -20,6 +20,7 @@
                             <h4>Create Account</h4>
                             <p class="text-muted">Join us today</p>
                         </div>
+                        <div id="alertContainer"></div>
                         <form id="registerForm">
                             <div class="mb-3">
                                 <label for="fullName" class="form-label">Full Name</label>
@@ -53,13 +54,113 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/amplify-config.js"></script>
-    <script>
+    <script type="module">
+        import './js/amplify-config.js';
+        import AuthService from './js/auth.js';
+        
+        const authService = new AuthService();
+        
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            // Add Cognito registration logic here
-            alert('Registration functionality will be implemented with Cognito');
+            
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match', 'danger');
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            
+            try {
+                const result = await authService.register(email, password, fullName);
+                
+                if (result.success) {
+                    if (result.needsConfirmation) {
+                        showAlert('Account created! Please check your email for verification code.', 'success');
+                        // Show confirmation form
+                        showConfirmationForm(email);
+                    } else {
+                        showAlert('Account created successfully!', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 2000);
+                    }
+                } else {
+                    showAlert(result.error, 'danger');
+                }
+            } catch (error) {
+                showAlert('Registration failed. Please try again.', 'danger');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Create Account';
+            }
         });
+        
+        function showConfirmationForm(email) {
+            const form = document.getElementById('registerForm');
+            form.innerHTML = `
+                <div class="mb-3">
+                    <label for="confirmationCode" class="form-label">Verification Code</label>
+                    <input type="text" class="form-control" id="confirmationCode" placeholder="Enter 6-digit code" required>
+                    <small class="form-text text-muted">Check your email for the verification code</small>
+                </div>
+                <button type="button" class="btn btn-primary w-100 mb-3" onclick="confirmAccount('${email}')">Verify Account</button>
+                <button type="button" class="btn btn-outline-secondary w-100" onclick="resendCode('${email}')">Resend Code</button>
+            `;
+        }
+        
+        window.confirmAccount = async function(email) {
+            const code = document.getElementById('confirmationCode').value;
+            if (!code) {
+                showAlert('Please enter the verification code', 'danger');
+                return;
+            }
+            
+            const result = await authService.confirmRegistration(email, code);
+            if (result.success) {
+                showAlert('Account verified successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            } else {
+                showAlert(result.error, 'danger');
+            }
+        };
+        
+        window.resendCode = async function(email) {
+            const result = await authService.resendConfirmationCode(email);
+            if (result.success) {
+                showAlert('Verification code sent!', 'success');
+            } else {
+                showAlert(result.error, 'danger');
+            }
+        };
+        
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            const form = document.getElementById('registerForm');
+            form.parentNode.insertBefore(alertDiv, form);
+            
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
     </script>
 </body>
 </html>

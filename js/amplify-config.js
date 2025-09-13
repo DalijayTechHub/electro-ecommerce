@@ -1,17 +1,27 @@
 import { Amplify } from 'aws-amplify';
 import { generateClient } from 'aws-amplify/api';
 
-// Amplify configuration will be auto-generated after deployment
+// Amplify configuration
 const amplifyConfig = {
-  aws_project_region: 'us-east-1',
-  aws_appsync_graphqlEndpoint: 'https://ev7foqrqtrb5dfnc5jxzsmncba.appsync-api.us-east-1.amazonaws.com/graphql',
-  aws_appsync_region: 'us-east-1',
-  aws_appsync_authenticationType: '1ri4fsl3rkatiao3s0euga984f',
-  aws_appsync_apiKey: 'da2-yqxugd3k4vdsxlz6mwyqsizqlq',
-  aws_appsync_realtimeEndpoint: 'wss://ev7foqrqtrb5dfnc5jxzsmncba.appsync-realtime-api.us-east-1.amazonaws.com/graphql',
-  aws_cognito_region: 'us-east-1',
-  aws_user_pools_id: 'us-east-1_Phg4oT68F',
-  aws_user_pools_web_client_id: 'YOUR_CLIENT_ID',
+  Auth: {
+    Cognito: {
+      userPoolId: 'us-east-1_Phg4oT68F',
+      userPoolClientId: 'YOUR_CLIENT_ID',
+      region: 'us-east-1',
+      signUpVerificationMethod: 'code',
+      loginWith: {
+        email: true
+      }
+    }
+  },
+  API: {
+    GraphQL: {
+      endpoint: 'https://ev7foqrqtrb5dfnc5jxzsmncba.appsync-api.us-east-1.amazonaws.com/graphql',
+      region: 'us-east-1',
+      defaultAuthMode: 'apiKey',
+      apiKey: 'da2-yqxugd3k4vdsxlz6mwyqsizqlq'
+    }
+  }
 };
 
 Amplify.configure(amplifyConfig);
@@ -114,6 +124,27 @@ export const categoryOperations = {
       }
     `;
     return await client.graphql({ query });
+  }
+};
+
+// Authentication operations
+export const authOperations = {
+  async getCurrentUser() {
+    try {
+      const user = await getCurrentUser();
+      return { success: true, user };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  },
+
+  async getUserSession() {
+    try {
+      const session = await fetchAuthSession();
+      return { success: true, session };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
   }
 };
 

@@ -79,18 +79,24 @@
                             <a href="#" class="dropdown-item"> Italiano</a>
                         </div>
                     </div>
-                    <div class="dropdown">
+                    <div class="dropdown" id="loginLink">
                         <a href="#" class="dropdown-toggle text-muted ms-2" data-bs-toggle="dropdown"><small><i
                                     class="fa fa-home me-2"></i> My Dashboard</small></a>
                         <div class="dropdown-menu rounded">
                             <a href="login.html" class="dropdown-item"> Login</a>
                             <a href="register.html" class="dropdown-item"> Register</a>
+                        </div>
+                    </div>
+                    <div class="dropdown" id="userMenu" style="display: none;">
+                        <a href="#" class="dropdown-toggle text-muted ms-2" data-bs-toggle="dropdown"><small><i
+                                    class="fa fa-user me-2"></i> <span id="userName">User</span></small></a>
+                        <div class="dropdown-menu rounded">
                             <a href="dashboard.html" class="dropdown-item"> Dashboard</a>
                             <a href="orders.html" class="dropdown-item"> My Orders</a>
                             <a href="wishlist.html" class="dropdown-item"> Wishlist</a>
                             <a href="profile.html" class="dropdown-item"> Account Settings</a>
                             <a href="addresses.html" class="dropdown-item"> My Addresses</a>
-                            <a href="login.html" class="dropdown-item"> Log Out</a>
+                            <a href="#" class="dropdown-item" onclick="logout()"> Log Out</a>
                         </div>
                     </div>
                 </div>
@@ -201,15 +207,23 @@
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto py-0">
                             <a href="index.html" class="nav-item nav-link active">Home</a>
-                            <a href="shop.html" class="nav-item nav-link">Shop</a>
                             <a href="about.html" class="nav-item nav-link">About Us</a>
+                            <a href="shop.html" class="nav-item nav-link">Shop</a>
                             <a href="contact.html" class="nav-item nav-link me-2">Contact</a>
                             <div class="nav-item dropdown d-block d-lg-none mb-3">
                                 <a href="cart.html" class="nav-link">Cart</a>
                             </div>
                         </div>
-                        <a href="login.html" class="btn btn-secondary rounded-pill py-2 px-4 px-lg-3 mb-3 mb-md-3 mb-lg-0"><i
+                        <a href="login.html" class="btn btn-secondary rounded-pill py-2 px-4 px-lg-3 mb-3 mb-md-3 mb-lg-0" id="mobileLoginBtn"><i
                                 class="fa fa-user me-2"></i> Login</a>
+                        <div class="dropdown d-none" id="mobileUserMenu">
+                            <a href="#" class="btn btn-secondary rounded-pill py-2 px-4 px-lg-3 mb-3 mb-md-3 mb-lg-0 dropdown-toggle" data-bs-toggle="dropdown"><i
+                                class="fa fa-user me-2"></i> <span id="mobileUserName">User</span></a>
+                            <div class="dropdown-menu">
+                                <a href="dashboard.html" class="dropdown-item">Dashboard</a>
+                                <a href="#" class="dropdown-item" onclick="logout()">Logout</a>
+                            </div>
+                        </div>
                     </div>
                 </nav>
             </div>
@@ -2254,6 +2268,46 @@
     
     <!-- E-commerce Functionality -->
     <script src="js/ecommerce.js"></script>
+    
+    <!-- Authentication -->
+    <script type="module">
+        import './js/amplify-config.js';
+        import AuthService from './js/auth.js';
+        
+        // Initialize auth service
+        const authService = new AuthService();
+        
+        // Global logout function
+        window.logout = async function() {
+            const result = await authService.logout();
+            if (result.success) {
+                window.location.href = 'index.html';
+            }
+        };
+        
+        // Update mobile navigation based on auth state
+        function updateMobileNav() {
+            const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+            const mobileUserMenu = document.getElementById('mobileUserMenu');
+            const mobileUserName = document.getElementById('mobileUserName');
+            
+            if (authService.isAuthenticated()) {
+                mobileLoginBtn.style.display = 'none';
+                mobileUserMenu.classList.remove('d-none');
+                if (mobileUserName && authService.getUser()) {
+                    mobileUserName.textContent = authService.getUser().attributes?.name || authService.getUser().username;
+                }
+            } else {
+                mobileLoginBtn.style.display = 'block';
+                mobileUserMenu.classList.add('d-none');
+            }
+        }
+        
+        // Update navigation on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(updateMobileNav, 100);
+        });
+    </script>
 </body>
 
 </html>
