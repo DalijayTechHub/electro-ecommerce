@@ -1,8 +1,8 @@
 // S3 Configuration for Image Storage
 const s3Config = {
-    bucketName: 'electro-ecommerce-images',
+    bucketName: 'electro-ecommerce-imgs',
     region: 'us-east-1',
-    baseUrl: 'https://electro-ecommerce-images.s3.us-east-1.amazonaws.com/'
+    baseUrl: 'https://electro-ecommerce-imgs.s3.us-east-1.amazonaws.com/'
 };
 
 // Update image paths to use S3

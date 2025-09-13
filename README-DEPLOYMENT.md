@@ -22,7 +22,7 @@ This project has been prepared for AWS Amplify deployment with a full-stack back
 ### Step 1: Create S3 Bucket for Images
 1. Go to S3 Console: https://s3.console.aws.amazon.com/
 2. Click **"Create bucket"**
-3. Bucket name: **electro-ecommerce-images**
+3. Bucket name: **electro-ecommerce-imgs**
 4. Region: **us-east-1**
 5. **Uncheck "Block all public access"**
 6. Click **"Create bucket"**
@@ -38,7 +38,7 @@ This project has been prepared for AWS Amplify deployment with a full-stack back
             "Effect": "Allow",
             "Principal": "*",
             "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::electro-ecommerce-images/*"
+            "Resource": "arn:aws:s3:::electro-ecommerce-imgs/*"
         }
     ]
 }
@@ -157,7 +157,7 @@ mutation {
     name: "Apple iPad Mini"
     price: 1050.00
     category: "SmartPhone"
-    imageUrl: "https://electro-ecommerce-images.s3.us-east-1.amazonaws.com/product-3.png"
+    imageUrl: "https://electro-ecommerce-imgs.s3.us-east-1.amazonaws.com/product-3.png"
     inStock: true
   }) {
     id name price
@@ -168,7 +168,7 @@ mutation {
 ## S3 Image Configuration
 The app uses `js/s3-config.js` to automatically convert local image paths to S3 URLs:
 - Local: `img/product-3.png`
-- S3: `https://electro-ecommerce-images.s3.us-east-1.amazonaws.com/product-3.png`
+- S3: `https://electro-ecommerce-imgs.s3.us-east-1.amazonaws.com/product-3.png`
 
 ## Security
 - API uses API_KEY for public read access

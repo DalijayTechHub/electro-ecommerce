@@ -9,8 +9,7 @@
     "dev": "http-server -p 3000"
   },
   "dependencies": {
-    "aws-amplify": "^6.0.0",
-    "@aws-amplify/ui-components": "^3.0.0"
+    "aws-amplify": "^6.0.0"
   },
   "devDependencies": {
     "http-server": "^14.1.1"
