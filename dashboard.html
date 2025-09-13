@@ -147,16 +147,15 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module">
-        import './js/amplify-config.js';
-        import AuthGuard from './js/auth-guard.js';
-        import AuthService from './js/auth.js';
-        import { orderOperations } from './js/amplify-config.js';
+    <script src="js/simple-auth.js"></script>
+    <script>
         
-        // Protect this page - require authentication
-        AuthGuard.requireAuth();
+        // Check authentication
+        if (!window.simpleAuth.isAuthenticated()) {
+            window.location.href = 'login.html';
+        }
         
-        const authService = new AuthService();
+        const authService = window.simpleAuth;
         
         // Load dashboard data
         document.addEventListener('DOMContentLoaded', async function() {
