@@ -66,8 +66,8 @@
                 const result = await authService.login(email, password);
                 
                 if (result.success) {
-                    // Success - redirect to dashboard or home
-                    window.location.href = 'dashboard.html';
+                    // Success - redirect to home page
+                    window.location.href = 'index.html';
                 } else {
                     // Show error
                     showAlert(result.error, 'danger');

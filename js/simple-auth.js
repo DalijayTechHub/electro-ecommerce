@@ -2,6 +2,16 @@
 class SimpleAuth {
   constructor() {
     this.currentUser = null;
+    this.checkAuthState();
+  }
+
+  checkAuthState() {
+    // Check if user was previously logged in
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      this.currentUser = JSON.parse(savedUser);
+      this.updateUI();
+    }
   }
 
   async register(email, password, fullName) {
@@ -27,6 +37,7 @@ class SimpleAuth {
     try {
       console.log('Login:', { email, password });
       this.currentUser = { username: email, attributes: { email, name: 'User' } };
+      localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
       this.updateUI();
       return { success: true, user: this.currentUser };
     } catch (error) {
@@ -37,6 +48,7 @@ class SimpleAuth {
   async logout() {
     try {
       this.currentUser = null;
+      localStorage.removeItem('currentUser');
       this.updateUI();
       return { success: true };
     } catch (error) {
