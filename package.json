@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "start": "http-server -p 3000",
-    "build": "echo 'Build complete'",
+    "build": "echo 'Static site build complete - no compilation needed'",
     "dev": "http-server -p 3000"
   },
   "dependencies": {
