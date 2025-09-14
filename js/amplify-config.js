@@ -2,25 +2,15 @@
 
 // Amplify configuration
 const amplifyConfig = {
-  Auth: {
-    Cognito: {
-      userPoolId: 'us-east-1_Phg4oT68F',
-      userPoolClientId: '1ri4fsl3rkatiao3s0euga984f',
-      region: 'us-east-1',
-      signUpVerificationMethod: 'code',
-      loginWith: {
-        email: true
-      }
-    }
-  },
-  API: {
-    GraphQL: {
-      endpoint: 'https://ev7foqrqtrb5dfnc5jxzsmncba.appsync-api.us-east-1.amazonaws.com/graphql',
-      region: 'us-east-1',
-      defaultAuthMode: 'apiKey',
-      apiKey: 'da2-yqxugd3k4vdsxlz6mwyqsizqlq'
-    }
-  }
+  aws_project_region: 'us-east-1',
+  aws_appsync_graphqlEndpoint: 'https://ev7foqrqtrb5dfnc5jxzsmncba.appsync-api.us-east-1.amazonaws.com/graphql',
+  aws_appsync_region: 'us-east-1',
+  aws_appsync_authenticationType: 'API_KEY',
+  aws_appsync_apiKey: 'da2-hro6qbzotzazbpspb5a2umsphi',
+  aws_appsync_realtimeEndpoint: 'https://em4rdhlpn5fnzmvdxmxfcfpgjq.appsync-api.us-east-1.amazonaws.com/graphql',
+  aws_cognito_region: 'us-east-1',
+  aws_user_pools_id: 'us-east-1_Phg4oT68F',
+  aws_user_pools_web_client_id: '16sr7dcan2bcke9m78tisljk0'
 };
 
 // Configuration will be applied when Amplify loads
