@@ -73,17 +73,16 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aws-amplify@5.3.19/dist/aws-amplify.min.js"></script>
+    <script src="https://unpkg.com/@aws-amplify/auth@4.6.15/dist/aws-amplify-auth.min.js"></script>
+    <script src="https://unpkg.com/@aws-amplify/core@4.7.15/dist/aws-amplify-core.min.js"></script>
     <script src="js/amplify-config.js"></script>
     <script>
-        // Wait for Amplify to load then configure
-        window.addEventListener('load', function() {
-            if (typeof window.aws_amplify !== 'undefined') {
-                window.aws_amplify.Amplify.configure(amplifyConfig);
-            } else if (typeof Amplify !== 'undefined') {
-                Amplify.configure(amplifyConfig);
-            } else {
-                console.error('Amplify not loaded');
+        // Configure Amplify Core
+        window.AmplifyCore.Amplify.configure({
+            Auth: {
+                region: 'us-east-1',
+                userPoolId: 'us-east-1_5eyUXAamx',
+                userPoolWebClientId: '135fgcksti97eha1jo8ui0jqjv'
             }
         });
         
@@ -91,10 +90,7 @@
         const authService = {
             async register(email, password, attributes) {
                 try {
-                    const AuthModule = window.aws_amplify?.Auth || window.Auth;
-                    if (!AuthModule) throw new Error('Auth module not available');
-                    
-                    const result = await AuthModule.signUp({
+                    const result = await window.AmplifyAuth.Auth.signUp({
                         username: email,
                         password: password,
                         attributes: {
@@ -113,8 +109,7 @@
             
             async confirmRegistration(email, code) {
                 try {
-                    const AuthModule = window.aws_amplify?.Auth || window.Auth;
-                    await AuthModule.confirmSignUp(email, code);
+                    await window.AmplifyAuth.Auth.confirmSignUp(email, code);
                     return { success: true };
                 } catch (error) {
                     return { success: false, error: error.message };
@@ -123,8 +118,7 @@
             
             async resendConfirmationCode(email) {
                 try {
-                    const AuthModule = window.aws_amplify?.Auth || window.Auth;
-                    await AuthModule.resendSignUp(email);
+                    await window.AmplifyAuth.Auth.resendSignUp(email);
                     return { success: true };
                 } catch (error) {
                     return { success: false, error: error.message };
