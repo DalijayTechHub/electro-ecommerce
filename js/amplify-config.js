@@ -4,13 +4,13 @@
 const amplifyConfig = {
   Auth: {
     region: 'us-east-1',
-    userPoolId: 'us-east-1_5eyUXAamx',
-    userPoolWebClientId: '135fgcksti97eha1jo8ui0jqjv'
+    userPoolId: 'us-east-1_2o9soyelp',
+    userPoolWebClientId: '464fopbqusvc5m9pmjs8cg0g08'
   },
-  aws_appsync_graphqlEndpoint: 'https://em4rdhlpn5fnzmvdxmxfcfpgjq.appsync-api.us-east-1.amazonaws.com/graphql',
+  aws_appsync_graphqlEndpoint: 'https://um4cwum3fnddff25vptholns3a.appsync-api.us-east-1.amazonaws.com/graphql',
   aws_appsync_region: 'us-east-1',
   aws_appsync_authenticationType: 'API_KEY',
-  aws_appsync_apiKey: 'da2-hro6qbzotzazbpspb5a2umsphi'
+  aws_appsync_apiKey: '4g3ccvfuqrfz3n4kaweasfueza'
 };
 
 // Configuration will be applied when Amplify loads
