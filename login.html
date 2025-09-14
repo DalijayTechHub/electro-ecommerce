@@ -67,6 +67,12 @@
                     };
                     
                     const result = await cognitoIdentityServiceProvider.initiateAuth(params).promise();
+                    
+                    // Store authentication state
+                    localStorage.setItem('isAuthenticated', 'true');
+                    localStorage.setItem('userEmail', email);
+                    localStorage.setItem('accessToken', result.AuthenticationResult.AccessToken);
+                    
                     return { success: true, user: result };
                 } catch (error) {
                     return { success: false, error: error.message };
