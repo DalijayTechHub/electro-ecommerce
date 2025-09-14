@@ -5,7 +5,7 @@ const amplifyConfig = {
   Auth: {
     region: 'us-east-1',
     userPoolId: 'us-east-1_2o9soyelp',
-    userPoolWebClientId: '2rm4fgbs5g127p2p4f4rit4job'
+    userPoolWebClientId: '464fopbqusvc5m9pmjs8cg0g08'
   },
   aws_appsync_graphqlEndpoint: 'https://um4cwum3fnddff25vptholns3a.appsync-api.us-east-1.amazonaws.com/graphql',
   aws_appsync_region: 'us-east-1',
