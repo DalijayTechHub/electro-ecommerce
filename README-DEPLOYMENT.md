@@ -67,14 +67,14 @@ This project has been prepared for AWS Amplify deployment with a full-stack back
 - S3 bucket integration
 - Cognito authentication
 
-### Option 2: Manual Upload
+<!-- ### Option 2: Manual Upload
 **AWS Amplify Console:**
 1. Go to https://console.aws.amazon.com/amplify/
 2. Click **"Create new app"**
 3. Choose **"Deploy without Git provider"**
 4. App name: **electro-ecommerce**
 5. Upload project zip file
-6. Click **"Save and deploy"**
+6. Click **"Save and deploy"** -->
 
 ### 3. Create Backend Services
 **DynamoDB Tables:**

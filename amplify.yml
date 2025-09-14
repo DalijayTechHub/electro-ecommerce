@@ -3,19 +3,11 @@ frontend:
   phases:
     preBuild:
       commands:
-        - npm install
+        - echo "No pre-build commands"
     build:
       commands:
-        - npm run build
+        - echo "Static site - no build required"
   artifacts:
     baseDirectory: /
     files:
       - '**/*'
-  cache:
-    paths:
-      - node_modules/**/*
-backend:
-  phases:
-    build:
-      commands:
-        - amplifyPush --simple
