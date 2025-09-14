@@ -7,8 +7,7 @@ class CognitoAuth {
 
   async checkAuthState() {
     try {
-      const { getCurrentUser } = window.AmplifyAuth;
-      const user = await getCurrentUser();
+      const user = await window.aws_amplify.getCurrentUser();
       this.currentUser = user;
       this.updateUI();
     } catch (error) {
@@ -18,8 +17,7 @@ class CognitoAuth {
 
   async register(email, password, fullName) {
     try {
-      const { signUp } = window.AmplifyAuth;
-      const result = await signUp({
+      const result = await window.aws_amplify.signUp({
         username: email,
         password: password,
         options: {
@@ -37,8 +35,7 @@ class CognitoAuth {
 
   async confirmRegistration(email, code) {
     try {
-      const { confirmSignUp } = window.AmplifyAuth;
-      await confirmSignUp({
+      await window.aws_amplify.confirmSignUp({
         username: email,
         confirmationCode: code
       });
@@ -50,8 +47,7 @@ class CognitoAuth {
 
   async login(email, password) {
     try {
-      const { signIn } = window.AmplifyAuth;
-      const user = await signIn({
+      const user = await window.aws_amplify.signIn({
         username: email,
         password: password
       });
@@ -65,8 +61,7 @@ class CognitoAuth {
 
   async logout() {
     try {
-      const { signOut } = window.AmplifyAuth;
-      await signOut();
+      await window.aws_amplify.signOut();
       this.currentUser = null;
       this.updateUI();
       return { success: true };
@@ -77,8 +72,7 @@ class CognitoAuth {
 
   async forgotPassword(email) {
     try {
-      const { resetPassword } = window.AmplifyAuth;
-      await resetPassword({ username: email });
+      await window.aws_amplify.resetPassword({ username: email });
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -87,8 +81,7 @@ class CognitoAuth {
 
   async confirmForgotPassword(email, code, newPassword) {
     try {
-      const { confirmResetPassword } = window.AmplifyAuth;
-      await confirmResetPassword({
+      await window.aws_amplify.confirmResetPassword({
         username: email,
         confirmationCode: code,
         newPassword: newPassword
@@ -101,8 +94,7 @@ class CognitoAuth {
 
   async resendConfirmationCode(email) {
     try {
-      const { resendSignUpCode } = window.AmplifyAuth;
-      await resendSignUpCode({ username: email });
+      await window.aws_amplify.resendSignUpCode({ username: email });
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };

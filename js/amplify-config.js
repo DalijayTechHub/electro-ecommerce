@@ -27,7 +27,7 @@ const amplifyConfig = {
 window.amplifyConfig = amplifyConfig;
 
 // Product operations
-export const productOperations = {
+window.productOperations = {
   async getAllProducts() {
     const query = `
       query ListProducts {
@@ -76,7 +76,7 @@ export const productOperations = {
 };
 
 // Order operations
-export const orderOperations = {
+window.orderOperations = {
   async createOrder(orderData) {
     const mutation = `
       mutation CreateOrder($input: CreateOrderInput!) {
@@ -110,7 +110,7 @@ export const orderOperations = {
 };
 
 // Category operations
-export const categoryOperations = {
+window.categoryOperations = {
   async getAllCategories() {
     const query = `
       query ListCategories {
@@ -126,7 +126,7 @@ export const categoryOperations = {
 };
 
 // Authentication operations
-export const authOperations = {
+window.authOperations = {
   async getCurrentUser() {
     try {
       const user = await getCurrentUser();
@@ -147,7 +147,7 @@ export const authOperations = {
 };
 
 // Cart operations (requires authentication)
-export const cartOperations = {
+window.cartOperations = {
   async addToCart(productId, quantity, userId) {
     const mutation = `
       mutation CreateCartItem($input: CreateCartItemInput!) {
