@@ -3,7 +3,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - echo "No pre-build commands"
+        - echo "Injecting environment variables"
     build:
       commands:
         - echo "Static site - no build required"
@@ -11,3 +11,5 @@ frontend:
     baseDirectory: /
     files:
       - '**/*'
+  cache:
+    paths: []

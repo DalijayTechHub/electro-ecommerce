@@ -87,6 +87,52 @@ This project has been prepared for AWS Amplify deployment with a full-stack back
 2. Click **"Create API"** → **"Build from scratch"**
 3. API name: **electro-api**
 4. Add GraphQL schema (see below)
+   type Product {
+  id: ID!
+  name: String!
+  price: Float!
+  category: String!
+  imageUrl: String
+  inStock: Boolean!
+}
+
+type Order {
+  id: ID!
+  customerEmail: String!
+  items: [OrderItem!]!   # new field: list of products in the order
+  totalAmount: Float!
+  status: String!
+}
+
+# Represents a single product inside an order (with quantity)
+type OrderItem {
+  product: Product!
+  quantity: Int!
+}
+
+type Query {
+  listProducts: [Product]
+  getProduct(id: ID!): Product
+  listOrders: [Order]             # new query to fetch all orders
+  getOrder(id: ID!): Order        # new query to fetch a single order
+}
+
+type Mutation {
+  createOrder(input: CreateOrderInput!): Order
+}
+
+input CreateOrderInput {
+  customerEmail: String!
+  items: [OrderItemInput!]!       # user must send which products + qty
+  status: String!
+}
+
+# Input type for products inside an order
+input OrderItemInput {
+  productId: ID!
+  quantity: Int!
+}
+
 5. Create data sources for DynamoDB tables
 6. Create resolvers for queries/mutations
 
@@ -191,40 +237,6 @@ const amplifyConfig = {
 ### 6. Add Sample Data
 Use AppSync Console → Queries to add products
 
-## GraphQL Schema
-Add this schema in AppSync Console:
-```graphql
-type Product {
-  id: ID!
-  name: String!
-  price: Float!
-  category: String!
-  imageUrl: String
-  inStock: Boolean!
-}
-
-type Order {
-  id: ID!
-  customerEmail: String!
-  totalAmount: Float!
-  status: String!
-}
-
-type Query {
-  listProducts: [Product]
-  getProduct(id: ID!): Product
-}
-
-type Mutation {
-  createOrder(input: CreateOrderInput!): Order
-}
-
-input CreateOrderInput {
-  customerEmail: String!
-  totalAmount: Float!
-  status: String!
-}
-```
 
 ## Frontend Integration
 - `js/amplify-config.js`: AWS Amplify configuration and API operations
