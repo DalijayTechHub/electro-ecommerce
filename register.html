@@ -22,13 +22,32 @@
                         </div>
                         <div id="alertContainer"></div>
                         <form id="registerForm">
-                            <div class="mb-3">
-                                <label for="fullName" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" id="fullName" required>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="givenName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="givenName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="familyName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="familyName" required>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phoneNumber" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phoneNumber" placeholder="+1234567890" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-control" id="gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
@@ -54,19 +73,60 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aws-amplify@6/dist/umd/aws-amplify.min.js"></script>
+    <script src="https://unpkg.com/aws-amplify@5.3.19/dist/aws-amplify.min.js"></script>
     <script src="js/amplify-config.js"></script>
-    <script src="js/cognito-auth.js"></script>
     <script>
         // Configure Amplify
-        window.aws_amplify.Amplify.configure(amplifyConfig);
-        const authService = window.cognitoAuth;
+        Amplify.configure(amplifyConfig);
+        
+        // Simple auth service
+        const authService = {
+            async register(email, password, attributes) {
+                try {
+                    const result = await Auth.signUp({
+                        username: email,
+                        password: password,
+                        attributes: {
+                            email: email,
+                            given_name: attributes.givenName,
+                            family_name: attributes.familyName,
+                            phone_number: attributes.phoneNumber,
+                            gender: attributes.gender
+                        }
+                    });
+                    return { success: true, needsConfirmation: !result.userConfirmed };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
+            },
+            
+            async confirmRegistration(email, code) {
+                try {
+                    await Auth.confirmSignUp(email, code);
+                    return { success: true };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
+            },
+            
+            async resendConfirmationCode(email) {
+                try {
+                    await Auth.resendSignUp(email);
+                    return { success: true };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
+            }
+        };
         
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const fullName = document.getElementById('fullName').value;
+            const givenName = document.getElementById('givenName').value;
+            const familyName = document.getElementById('familyName').value;
             const email = document.getElementById('email').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const gender = document.getElementById('gender').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -82,7 +142,12 @@
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
             
             try {
-                const result = await authService.register(email, password, fullName);
+                const result = await authService.register(email, password, {
+                    givenName,
+                    familyName,
+                    phoneNumber,
+                    gender
+                });
                 
                 if (result.success) {
                     if (result.needsConfirmation) {

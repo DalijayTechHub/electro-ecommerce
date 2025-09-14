@@ -1,26 +1,16 @@
 // AWS Amplify will be loaded via CDN
 
-// Amplify configuration
+// Amplify v5 configuration
 const amplifyConfig = {
   Auth: {
-    Cognito: {
-      userPoolId: 'us-east-1_5eyUXAamx',
-      userPoolClientId: '135fgcksti97eha1jo8ui0jqjv',
-      region: 'us-east-1',
-      signUpVerificationMethod: 'code',
-      loginWith: {
-        email: true
-      }
-    }
+    region: 'us-east-1',
+    userPoolId: 'us-east-1_5eyUXAamx',
+    userPoolWebClientId: '135fgcksti97eha1jo8ui0jqjv'
   },
-  API: {
-    GraphQL: {
-      endpoint: 'https://em4rdhlpn5fnzmvdxmxfcfpgjq.appsync-api.us-east-1.amazonaws.com/graphql',
-      region: 'us-east-1',
-      defaultAuthMode: 'apiKey',
-      apiKey: 'da2-hro6qbzotzazbpspb5a2umsphi'
-    }
-  }
+  aws_appsync_graphqlEndpoint: 'https://em4rdhlpn5fnzmvdxmxfcfpgjq.appsync-api.us-east-1.amazonaws.com/graphql',
+  aws_appsync_region: 'us-east-1',
+  aws_appsync_authenticationType: 'API_KEY',
+  aws_appsync_apiKey: 'da2-hro6qbzotzazbpspb5a2umsphi'
 };
 
 // Configuration will be applied when Amplify loads
