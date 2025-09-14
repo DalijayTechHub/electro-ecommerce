@@ -73,35 +73,31 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/@aws-amplify/auth@4.6.15/dist/aws-amplify-auth.min.js"></script>
-    <script src="https://unpkg.com/@aws-amplify/core@4.7.15/dist/aws-amplify-core.min.js"></script>
-    <script src="js/amplify-config.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1563.0.min.js"></script>
     <script>
-        // Configure Amplify Core
-        window.AmplifyCore.Amplify.configure({
-            Auth: {
-                region: 'us-east-1',
-                userPoolId: 'us-east-1_5eyUXAamx',
-                userPoolWebClientId: '135fgcksti97eha1jo8ui0jqjv'
-            }
-        });
+        // Configure AWS SDK
+        AWS.config.region = 'us-east-1';
+        const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
         
         // Simple auth service
         const authService = {
             async register(email, password, attributes) {
                 try {
-                    const result = await window.AmplifyAuth.Auth.signUp({
-                        username: email,
-                        password: password,
-                        attributes: {
-                            email: email,
-                            given_name: attributes.givenName,
-                            family_name: attributes.familyName,
-                            phone_number: attributes.phoneNumber,
-                            gender: attributes.gender
-                        }
-                    });
-                    return { success: true, needsConfirmation: !result.userConfirmed };
+                    const params = {
+                        ClientId: '135fgcksti97eha1jo8ui0jqjv',
+                        Username: email,
+                        Password: password,
+                        UserAttributes: [
+                            { Name: 'email', Value: email },
+                            { Name: 'given_name', Value: attributes.givenName },
+                            { Name: 'family_name', Value: attributes.familyName },
+                            { Name: 'phone_number', Value: attributes.phoneNumber },
+                            { Name: 'gender', Value: attributes.gender }
+                        ]
+                    };
+                    
+                    const result = await cognitoIdentityServiceProvider.signUp(params).promise();
+                    return { success: true, needsConfirmation: true };
                 } catch (error) {
                     return { success: false, error: error.message };
                 }
@@ -109,7 +105,12 @@
             
             async confirmRegistration(email, code) {
                 try {
-                    await window.AmplifyAuth.Auth.confirmSignUp(email, code);
+                    const params = {
+                        ClientId: '135fgcksti97eha1jo8ui0jqjv',
+                        Username: email,
+                        ConfirmationCode: code
+                    };
+                    await cognitoIdentityServiceProvider.confirmSignUp(params).promise();
                     return { success: true };
                 } catch (error) {
                     return { success: false, error: error.message };
@@ -118,7 +119,11 @@
             
             async resendConfirmationCode(email) {
                 try {
-                    await window.AmplifyAuth.Auth.resendSignUp(email);
+                    const params = {
+                        ClientId: '135fgcksti97eha1jo8ui0jqjv',
+                        Username: email
+                    };
+                    await cognitoIdentityServiceProvider.resendConfirmationCode(params).promise();
                     return { success: true };
                 } catch (error) {
                     return { success: false, error: error.message };
