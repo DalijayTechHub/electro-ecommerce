@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Cognito Integration</title>
+</head>
+<body>
+    <h1>Cognito Test</h1>
+    <div id="result"></div>
+    
+    <script src="https://unpkg.com/@aws-amplify/core@6/dist/umd/aws-amplify-core.min.js"></script>
+    <script src="https://unpkg.com/@aws-amplify/auth@6/dist/umd/aws-amplify-auth.min.js"></script>
+    <script src="js/amplify-config.js"></script>
+    
+    <script>
+        async function testCognito() {
+            try {
+                // Configure Amplify
+                window.AmplifyCore.Amplify.configure(amplifyConfig);
+                
+                console.log('Amplify configured with:', amplifyConfig);
+                document.getElementById('result').innerHTML = 'Amplify configured successfully!<br>Check console for details.';
+                
+                // Test sign up
+                const { signUp } = window.AmplifyAuth;
+                console.log('SignUp function available:', typeof signUp);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = 'Error: ' + error.message;
+            }
+        }
+        
+        testCognito();
+    </script>
+</body>
+</html>

@@ -99,6 +99,16 @@ class CognitoAuth {
     }
   }
 
+  async resendConfirmationCode(email) {
+    try {
+      const { resendSignUpCode } = window.AmplifyAuth;
+      await resendSignUpCode({ username: email });
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
   isAuthenticated() {
     return this.currentUser !== null;
   }
