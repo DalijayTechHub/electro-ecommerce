@@ -203,14 +203,48 @@ $util.toJson($context.result)
 ```
 
 ### 4. Create Cognito User Pool
+
+**Step 1: Create User Pool**
 1. Go to Cognito Console: https://console.aws.amazon.com/cognito/
 2. Click **"User pools"** → **"Create user pool"**
-3. **Pool name:** `electro-ecommerce-users`
-4. **Sign-in options:** Email
-5. **App client name:** `electro-web-client`
-6. **Copy User Pool ID** (format: `us-east-1_xxxxxxxxx`)
-7. Go to **App integration** tab → **App clients section**
-8. **Copy Client ID**
+3. **Configure sign-in experience:**
+   - Cognito user pool sign-in options: **Email**
+   - User name requirements: **Email address**
+4. **Configure security requirements:**
+   - Password policy: Use default or customize
+   - Multi-factor authentication: **No MFA** (for simplicity)
+5. **Configure sign-up experience:**
+   - Self-service sign-up: **Enable**
+   - Required attributes: **email, given_name, family_name, phone_number, gender**
+   - Email verification: **Send email verification message**
+6. **Configure message delivery:**
+   - Email provider: **Send email with Cognito**
+7. **Integrate your app:**
+   - User pool name: `electro-ecommerce-users`
+   - Use the Cognito Hosted UI: **No**
+8. Click **"Create user pool"**
+9. **Copy User Pool ID** (format: `us-east-1_xxxxxxxxx`)
+
+**Step 2: Create App Client**
+1. Go to your User Pool → **App integration** tab
+2. Click **"Create app client"**
+3. **App client configuration:**
+   - App type: **Single-page application (SPA)**
+   - App client name: `electro-web-app`
+   - **Don't generate client secret** ✓
+4. **Authentication flows:**
+   - Enable: `ALLOW_USER_PASSWORD_AUTH`
+   - Enable: `ALLOW_USER_SRP_AUTH`
+   - Enable: `ALLOW_REFRESH_TOKEN_AUTH`
+5. **App client URL configuration:**
+   - Callback URLs: `https://main.d1ox04t9yf3c8t.amplifyapp.com`
+6. Click **"Create app client"**
+7. **Copy Client ID**
+
+**Important Notes:**
+- Ensure **"Generate client secret"** is **DISABLED** for web applications
+- Required attributes must match the registration form fields
+- Email verification is required for user registration
 
 ### 5. Configure Frontend
 1. **Get API Key from AppSync:**

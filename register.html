@@ -87,7 +87,7 @@
                     const username = email.replace('@', '_').replace(/\./g, '_') + '_' + Date.now();
                     
                     const params = {
-                        ClientId: '1m6q6o028rg7tdtodnmb22adfr',
+                        ClientId: '464fopbqusvc5m9pmjs8cg0g08',
                         Username: username,
                         Password: password,
                         UserAttributes: [
@@ -109,7 +109,7 @@
             async confirmRegistration(email, code) {
                 try {
                     const params = {
-                        ClientId: '1m6q6o028rg7tdtodnmb22adfr',
+                        ClientId: '464fopbqusvc5m9pmjs8cg0g08',
                         Username: email,
                         ConfirmationCode: code
                     };
@@ -123,7 +123,7 @@
             async resendConfirmationCode(email) {
                 try {
                     const params = {
-                        ClientId: '1m6q6o028rg7tdtodnmb22adfr',
+                        ClientId: '464fopbqusvc5m9pmjs8cg0g08',
                         Username: email
                     };
                     await cognitoIdentityServiceProvider.resendConfirmationCode(params).promise();
