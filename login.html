@@ -47,17 +47,24 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aws-amplify@5.3.19/dist/aws-amplify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aws-amplify@5.3.19/dist/aws-amplify.min.js"></script>
     <script src="js/amplify-config.js"></script>
     <script>
-        // Configure Amplify
-        Amplify.configure(amplifyConfig);
+        // Wait for Amplify to load then configure
+        window.addEventListener('load', function() {
+            if (typeof window.aws_amplify !== 'undefined') {
+                window.aws_amplify.Amplify.configure(amplifyConfig);
+            } else if (typeof Amplify !== 'undefined') {
+                Amplify.configure(amplifyConfig);
+            }
+        });
         
         // Simple auth service
         const authService = {
             async login(email, password) {
                 try {
-                    const user = await Auth.signIn(email, password);
+                    const AuthModule = window.aws_amplify?.Auth || window.Auth;
+                    const user = await AuthModule.signIn(email, password);
                     return { success: true, user: user };
                 } catch (error) {
                     return { success: false, error: error.message };
