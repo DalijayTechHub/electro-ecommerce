@@ -83,9 +83,12 @@
         const authService = {
             async register(email, password, attributes) {
                 try {
+                    // Generate unique username from email
+                    const username = email.replace('@', '_').replace(/\./g, '_') + '_' + Date.now();
+                    
                     const params = {
                         ClientId: '1m6q6o028rg7tdtodnmb22adfr',
-                        Username: email,
+                        Username: username,
                         Password: password,
                         UserAttributes: [
                             { Name: 'email', Value: email },
@@ -97,7 +100,7 @@
                     };
                     
                     const result = await cognitoIdentityServiceProvider.signUp(params).promise();
-                    return { success: true, needsConfirmation: true };
+                    return { success: true, needsConfirmation: true, username: username };
                 } catch (error) {
                     return { success: false, error: error.message };
                 }
@@ -165,7 +168,7 @@
                     if (result.needsConfirmation) {
                         showAlert('Account created! Please check your email for verification code.', 'success');
                         // Show confirmation form
-                        showConfirmationForm(email);
+                        showConfirmationForm(result.username);
                     } else {
                         showAlert('Account created successfully!', 'success');
                         setTimeout(() => {
@@ -183,7 +186,7 @@
             }
         });
         
-        function showConfirmationForm(email) {
+        function showConfirmationForm(username) {
             const form = document.getElementById('registerForm');
             form.innerHTML = `
                 <div class="mb-3">
@@ -191,19 +194,19 @@
                     <input type="text" class="form-control" id="confirmationCode" placeholder="Enter 6-digit code" required>
                     <small class="form-text text-muted">Check your email for the verification code</small>
                 </div>
-                <button type="button" class="btn btn-primary w-100 mb-3" onclick="confirmAccount('${email}')">Verify Account</button>
-                <button type="button" class="btn btn-outline-secondary w-100" onclick="resendCode('${email}')">Resend Code</button>
+                <button type="button" class="btn btn-primary w-100 mb-3" onclick="confirmAccount('${username}')">Verify Account</button>
+                <button type="button" class="btn btn-outline-secondary w-100" onclick="resendCode('${username}')">Resend Code</button>
             `;
         }
         
-        window.confirmAccount = async function(email) {
+        window.confirmAccount = async function(username) {
             const code = document.getElementById('confirmationCode').value;
             if (!code) {
                 showAlert('Please enter the verification code', 'danger');
                 return;
             }
             
-            const result = await authService.confirmRegistration(email, code);
+            const result = await authService.confirmRegistration(username, code);
             if (result.success) {
                 showAlert('Account verified successfully!', 'success');
                 setTimeout(() => {
@@ -214,8 +217,8 @@
             }
         };
         
-        window.resendCode = async function(email) {
-            const result = await authService.resendConfirmationCode(email);
+        window.resendCode = async function(username) {
+            const result = await authService.resendConfirmationCode(username);
             if (result.success) {
                 showAlert('Verification code sent!', 'success');
             } else {
