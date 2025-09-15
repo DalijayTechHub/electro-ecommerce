@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { signIn, signUp, confirmSignUp, signOut, getCurrentUser } from 'aws-amplify/auth';
+import { Auth } from 'aws-amplify';
 
 interface User {
   username: string;
@@ -40,7 +40,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const checkAuthState = async () => {
     try {
-      const currentUser = await getCurrentUser();
+      const currentUser = await Auth.currentAuthenticatedUser();
       setUser(currentUser);
     } catch (error) {
       setUser(null);
@@ -50,29 +50,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const login = async (email: string, password: string) => {
-    const { isSignedIn, nextStep } = await signIn({ username: email, password });
-    if (isSignedIn) {
-      const currentUser = await getCurrentUser();
-      setUser(currentUser);
-    }
+    const user = await Auth.signIn(email, password);
+    setUser(user);
   };
 
   const register = async (email: string, password: string, attributes: any) => {
-    await signUp({
+    await Auth.signUp({
       username: email,
       password,
-      options: {
-        userAttributes: attributes
-      }
+      attributes
     });
   };
 
   const confirmSignUpUser = async (email: string, code: string) => {
-    await confirmSignUp({ username: email, confirmationCode: code });
+    await Auth.confirmSignUp(email, code);
   };
 
   const logout = async () => {
-    await signOut();
+    await Auth.signOut();
     setUser(null);
   };
 

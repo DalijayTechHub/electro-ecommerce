@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Grid, Card, CardMedia, CardContent, Typography, Button, Box, CircularProgress } from '@mui/material';
 import { useCart } from '../context/CartContext';
-import { generateClient } from 'aws-amplify/api';
-
-const client = generateClient();
+import { API, graphqlOperation } from 'aws-amplify';
 
 const listProducts = `
   query ListProducts {
@@ -38,7 +36,7 @@ const Shop: React.FC = () => {
 
   const fetchProducts = async () => {
     try {
-      const result: any = await client.graphql({ query: listProducts });
+      const result: any = await API.graphql(graphqlOperation(listProducts));
       setProducts(result.data.listProducts || []);
     } catch (error) {
       console.error('Error fetching products:', error);
