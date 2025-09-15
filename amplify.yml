@@ -3,13 +3,14 @@ frontend:
   phases:
     preBuild:
       commands:
-        - echo "Injecting environment variables"
+        - npm ci
     build:
       commands:
-        - echo "Static site - no build required"
+        - npm run build
   artifacts:
-    baseDirectory: /
+    baseDirectory: dist
     files:
       - '**/*'
   cache:
-    paths: []
+    paths:
+      - node_modules/**/*
