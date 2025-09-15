@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Typography, Card, CardContent, Grid, Button, IconButton, Box, Divider } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { Add, Remove, Delete } from '@mui/icons-material';
 import { useCart } from '../context/CartContext';
 
@@ -112,7 +113,13 @@ const Cart: React.FC = () => {
                 <Typography variant="h6">Total:</Typography>
                 <Typography variant="h6">${state.total.toFixed(2)}</Typography>
               </Box>
-              <Button variant="contained" fullWidth sx={{ mb: 2 }}>
+              <Button 
+                variant="contained" 
+                fullWidth 
+                sx={{ mb: 2 }}
+                component={Link}
+                to="/checkout"
+              >
                 Proceed to Checkout
               </Button>
               <Button variant="outlined" fullWidth onClick={clearCart}>

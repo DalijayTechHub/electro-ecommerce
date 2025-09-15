@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Grid, Card, CardMedia, CardContent, Typography, Button, Box, CircularProgress } from '@mui/material';
 import { useCart } from '../context/CartContext';
-import { API, graphqlOperation } from 'aws-amplify';
+import { generateClient } from 'aws-amplify/api';
+
+const client = generateClient();
 
 const listProducts = `
   query ListProducts {
@@ -36,16 +38,16 @@ const Shop: React.FC = () => {
 
   const fetchProducts = async () => {
     try {
-      const result: any = await API.graphql(graphqlOperation(listProducts));
+      const result: any = await client.graphql({ query: listProducts });
       setProducts(result.data.listProducts || []);
     } catch (error) {
       console.error('Error fetching products:', error);
       // Fallback to mock data
       setProducts([
-        { id: '1', name: 'Apple iPad Mini', price: 1050, category: 'Tablets', imageUrl: '/img/product-3.png', inStock: true },
-        { id: '2', name: 'Samsung Galaxy Tab', price: 850, category: 'Tablets', imageUrl: '/img/product-4.png', inStock: true },
-        { id: '3', name: 'MacBook Pro', price: 2500, category: 'Laptops', imageUrl: '/img/product-5.png', inStock: true },
-        { id: '4', name: 'iPhone 14', price: 999, category: 'Smartphones', imageUrl: '/img/product-6.png', inStock: true },
+        { id: '1', name: 'Apple iPad Mini', price: 1050, category: 'Tablets', imageUrl: 'https://electro-ecommerce-imgs.s3.us-east-1.amazonaws.com/product-3.png', inStock: true },
+        { id: '2', name: 'Samsung Galaxy Tab', price: 850, category: 'Tablets', imageUrl: 'https://electro-ecommerce-imgs.s3.us-east-1.amazonaws.com/product-4.png', inStock: true },
+        { id: '3', name: 'MacBook Pro', price: 2500, category: 'Laptops', imageUrl: 'https://electro-ecommerce-imgs.s3.us-east-1.amazonaws.com/product-5.png', inStock: true },
+        { id: '4', name: 'iPhone 14', price: 999, category: 'Smartphones', imageUrl: 'https://electro-ecommerce-imgs.s3.us-east-1.amazonaws.com/product-6.png', inStock: true },
       ]);
     } finally {
       setLoading(false);

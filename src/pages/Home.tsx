@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 
 const Home: React.FC = () => {
   const featuredProducts = [
-    { id: '1', name: 'Apple iPad Mini', price: 1050, image: '/img/product-3.png' },
-    { id: '2', name: 'Samsung Galaxy Tab', price: 850, image: '/img/product-4.png' },
-    { id: '3', name: 'MacBook Pro', price: 2500, image: '/img/product-5.png' },
+    { id: '1', name: 'Apple iPad Mini', price: 1050, image: 'https://electro-ecommerce-imgs.s3.us-east-1.amazonaws.com/product-3.png' },
+    { id: '2', name: 'Samsung Galaxy Tab', price: 850, image: 'https://electro-ecommerce-imgs.s3.us-east-1.amazonaws.com/product-4.png' },
+    { id: '3', name: 'MacBook Pro', price: 2500, image: 'https://electro-ecommerce-imgs.s3.us-east-1.amazonaws.com/product-5.png' },
   ];
 
   return (
@@ -14,7 +14,7 @@ const Home: React.FC = () => {
       {/* Hero Section */}
       <Box
         sx={{
-          backgroundImage: 'url(/img/carousel-1.png)',
+          backgroundImage: 'url(https://electro-ecommerce-imgs.s3.us-east-1.amazonaws.com/carousel-1.png)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           height: 400,
